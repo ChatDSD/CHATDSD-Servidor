@@ -2,21 +2,27 @@ package servidor_gl;
 
 
 import DAO.ServidorDAO;
+import com.google.gson.Gson;
+import model.Login;
+import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.sql.SQLException;
 
 public class Servidor {
 
-    public String run(String json ,String email, String senha ) throws SQLException, ClassNotFoundException {
+    public String run(String json ) throws SQLException, ClassNotFoundException {
         String retur  = "";
         ServidorDAO db = new ServidorDAO();
         String opção  = json.substring(0,json.indexOf("{"));
-        String gson = json.substring(json.indexOf("{"), json.indexOf("}"));
+        String conteudo = json.substring(json.indexOf("{"), json.indexOf("}"));
+        conteudo +="}" ;
         System.out.println(opção);
         System.out.println(json.indexOf("{"));
         switch (opção) {
             case "authentication":
-               retur = db.authentication(email, senha);
+                JSONObject login = new JSONObject(conteudo);
+           retur = db.authentication(login.getString("login"),login.getInt("senha"));
                 break;
             case "Entrar":
 

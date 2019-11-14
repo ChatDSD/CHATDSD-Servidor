@@ -200,7 +200,7 @@ public class ServidorDAO {
         }
         System.out.println("Operation done successfully");
     }
-    public String authentication(String emailc, String senhac) throws ClassNotFoundException, SQLException {
+    public String authentication(String emailc, int senhac) throws ClassNotFoundException, SQLException {
         String retu;
 
             Class.forName(org);
@@ -212,10 +212,12 @@ public class ServidorDAO {
             ResultSet rs = stmt.executeQuery( "SELECT email FROM CLIENTE WHERE EMAIL = \""+emailc+"\" " +
                     "AND SENHA = \""+senhac+"\";" );
 
-            if(rs == null){
-                return  retu = "FAIL";
+
+            while (rs.next()){
+                return retu = "SUCCESS";
+
             }
-            return retu = "SUCCESS";
+            return  retu = "fail";
     }
 
 }

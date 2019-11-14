@@ -24,48 +24,48 @@ public class Servidor_GL {
 
     public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException {
 
-        String login = "Rich-Mond ";
-        String senha = "1234";
+        String login = "gutyGuty";
+        int senha = 1234;
 //        ServidorDAO db = new ServidorDAO();
-//        db.salvar("'Mark','Rich-Mond ','true', 1234, '24/01/19'" );
-
-        Servidor servidor = new Servidor();
-        String retur = servidor.run( "authentication{"
-                + "\"login\":\"" + login +"\","
-                + "\"senha\":\"" + senha +"\"}", login ,senha);
-        System.out.println(retur);
-//        int porta = 56000;
-//        ServerSocket server = new ServerSocket(porta);
-//        server.setReuseAddress(true);
-//        Socket conn = null;
-//        PrintWriter out = null;
-//        BufferedReader in = null;
-//        Servidor servidor = new Servidor();
+//        db.salvar("'Mark','gutyGuty','true',1234, '24/01/19'" );
 //
-//        while (true) {
-//            try {
-//                System.out.println("Aguardando conexao de cliente...");
-//                conn = server.accept();
-//                System.out.println("Conexao estabelecida. " + conn.getInetAddress().getHostAddress() + " Enviando dados...");
-//                in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//                String linha = in.readLine();
-//                while (linha == null) {
-//                    linha = in.readLine();
-//                    System.out.println(linha);
-//                }
-//                servidor.run(linha);
-//                out = new PrintWriter(conn.getOutputStream(), true);
-//                out.println("autenticado!");
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } finally {
-//                conn.close();
-//                if (out != null) {
-//                    out.close();
-//                }
-//                System.out.println("Conexao fechada.");
-//            }conn.close();
-//        }
+//        Servidor servidor = new Servidor();
+//        String retur = servidor.run( "authentication{"
+//                + "\"login\":\"" + login +"\","
+//                + "\"senha\":" + senha +"}");
+//        System.out.println(retur);
+        int porta = 56000;
+        ServerSocket server = new ServerSocket(porta);
+        server.setReuseAddress(true);
+        Socket conn = null;
+        PrintWriter out = null;
+        BufferedReader in = null;
+        Servidor servidor = new Servidor();
+
+        while (true) {
+            try {
+                System.out.println("Aguardando conexao de cliente...");
+                conn = server.accept();
+                System.out.println("Conexao estabelecida. " + conn.getInetAddress().getHostAddress() + " Enviando dados...");
+                in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String linha = in.readLine();
+                while (linha == null) {
+                    linha = in.readLine();
+                    System.out.println(linha);
+                }
+                String serverReturn = servidor.run(linha);
+                out = new PrintWriter(conn.getOutputStream(), true);
+                out.println(serverReturn);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                conn.close();
+                if (out != null) {
+                    out.close();
+                }
+                System.out.println("Conexao fechada.");
+            }conn.close();
+        }
 
     }
     
