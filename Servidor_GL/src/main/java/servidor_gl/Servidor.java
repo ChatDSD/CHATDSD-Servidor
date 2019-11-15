@@ -2,11 +2,8 @@ package servidor_gl;
 
 
 import DAO.ServidorDAO;
-import com.google.gson.Gson;
-import model.Login;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.sql.SQLException;
 
 public class Servidor {
@@ -24,11 +21,19 @@ public class Servidor {
                 JSONObject login = new JSONObject(conteudo);
            retur = db.authentication(login.getString("login"),login.getInt("senha"));
                 break;
-            case "Entrar":
-
+            case "create_account":
+                JSONObject cadastrar = new JSONObject(conteudo);
+                retur = db.salvar(cadastrar.getString("apelido"),
+                        cadastrar.getString("email"),
+                        cadastrar.getInt("senha"),
+                        cadastrar.getBoolean("online"),
+                        cadastrar.getString("nasci"));
                 break;
-            case "BuscaUser":
-
+            case "update_info":
+                JSONObject update = new JSONObject(conteudo);
+                retur = db.update(update.getString("apelido"),
+                        update.getString("email"),
+                        update.getString("nasci"));
                 break;
             case "AddUser":
 

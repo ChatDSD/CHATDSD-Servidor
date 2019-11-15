@@ -69,10 +69,8 @@ public class ServidorDAO {
     }
 
 
-    public void salvar ( String json ) {
-        Connection c = null;
-        Statement stmt = null;
-
+    public String salvar ( String apelido, String email, int senha , boolean online , String nasci) {
+        String retur;
         try {
             Class.forName(org);
             c = DriverManager.getConnection(db);
@@ -81,7 +79,7 @@ public class ServidorDAO {
 
             stmt = c.createStatement();
             String sql = "INSERT INTO CLIENTE (APELIDO,EMAIL,ONLINE,SENHA,NASCI) " +
-                    "VALUES ("+json+" );";
+                    "VALUES ('"+apelido+"','"+email+"','"+online+"','"+senha+"', '"+nasci+"' );";
             stmt.executeUpdate(sql);
 
             stmt.close();
@@ -90,8 +88,9 @@ public class ServidorDAO {
         } catch ( Exception e ) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
+            return retur = "FAIL";
         }
-        System.out.println("Records created successfully");
+        return retur= "SUCCESS";
     }
     public void buscaAtributos( ) {
 
@@ -125,43 +124,27 @@ public class ServidorDAO {
         }
         System.out.println("Operation done successfully");
     }
-    public void update(int idCliente, String atributo) {
-
-        try {
+    public String update( String apelido , String email, String nasci) throws SQLException, ClassNotFoundException {
+            String retur;
+            try {
             Class.forName(org);
-            c = DriverManager.getConnection("jdbc:sqlite:test.db");
+            c = DriverManager.getConnection(db);
             c.setAutoCommit(false);
             System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
-            String sql = "UPDATE CLIENTE set "+atributo+"  where ID="+idCliente+";";
+            String sql = "UPDATE CLIENTE set EMAIL = '"+email+"', NASCI = '"+nasci+"'  where APELIDO= '"+apelido+"';";
             stmt.executeUpdate(sql);
-            c.commit();
-
-            ResultSet rs = stmt.executeQuery( "SELECT * FROM Cliente;" );
-
-            while ( rs.next() ) {
-                int id = rs.getInt("id");
-                String  name = rs.getString("name");
-                int age  = rs.getInt("age");
-                String  address = rs.getString("address");
-                float salary = rs.getFloat("salary");
-
-                System.out.println( "ID = " + id );
-                System.out.println( "NAME = " + name );
-                System.out.println( "AGE = " + age );
-                System.out.println( "ADDRESS = " + address );
-                System.out.println( "SALARY = " + salary );
-                System.out.println();
-            }
-            rs.close();
             stmt.close();
             c.close();
-        } catch ( Exception e ) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            System.exit(0);
-        }
-        System.out.println("Operation done successfully");
+
+            } catch ( Exception e ) {
+                System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+                System.exit(0);
+                return  retur = "FAIL";
+            }
+        return retur = "SUCCESS";
+
     }
     public void delete(int idCliente) {
         try {
@@ -211,13 +194,12 @@ public class ServidorDAO {
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery( "SELECT email FROM CLIENTE WHERE EMAIL = \""+emailc+"\" " +
                     "AND SENHA = \""+senhac+"\";" );
-
-
+            
             while (rs.next()){
                 return retu = "SUCCESS";
-
             }
             return  retu = "fail";
+
     }
 
 }

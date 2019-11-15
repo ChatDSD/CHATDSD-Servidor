@@ -23,16 +23,17 @@ import java.sql.SQLException;
 public class Servidor_GL {
 
     public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException {
-
-        String login = "gutyGuty";
-        int senha = 1234;
+//        boolean online = true;
+//        String apelido = "gutyGuty";
+//        int senha = 1234;
+//        String nasci = "24/01/19";
+//        String email = "asjdodfo";
 //        ServidorDAO db = new ServidorDAO();
-//        db.salvar("'Mark','gutyGuty','true',1234, '24/01/19'" );
-//
 //        Servidor servidor = new Servidor();
-//        String retur = servidor.run( "authentication{"
-//                + "\"login\":\"" + login +"\","
-//                + "\"senha\":" + senha +"}");
+//        String retur = servidor.run( "update_info{"
+//                + "\"apelido\":\"" + apelido + "\","
+//                + "\"email\":\"" + email + "\","
+//                + "\"nasci\":\"" + nasci + "\"}");
 //        System.out.println(retur);
         int porta = 56000;
         ServerSocket server = new ServerSocket(porta);
