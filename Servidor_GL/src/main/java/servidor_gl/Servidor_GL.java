@@ -24,17 +24,17 @@ public class Servidor_GL {
 
     public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException {
 //        boolean online = true;
-//        String login = "lulululu";
+//        String login = "lulu";
 //        String senha = "12345";
-//        String idade = "24/01/19";
+//        String idade = "24/11/19";
 //        String ip = "123.56.760";
 //        String porta = "56000";
 //        String email = "asjdodfo";
-//        String login_cliente = "gutyGuty";
-//        String login_contato = "lulululu";
+//        String login_cliente = "Luciano";
+//        String login_contato = "gustavo";
 //        ServidorDAO db = new ServidorDAO();
 //        Servidor servidor = new Servidor();
-//        String retur = servidor.run( "create_account{"
+//        String retur = servidor.run( "update_info{"
 //                + "\"login\":\"" + login + "\","
 //                + "\"email\":\"" + email + "\","
 //                + "\"online\":\"" + online + "\","

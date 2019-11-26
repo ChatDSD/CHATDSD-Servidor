@@ -19,7 +19,7 @@ public class Servidor {
         switch (opção) {
             case "authentication":
                 JSONObject login = new JSONObject(conteudo);
-           retur = db.authentication(login.getString("login"),login.getInt("senha"));
+           retur = db.authentication(login.getString("login"),login.getString("senha"));
                 break;
             case "create_account":
                 JSONObject cadastrar = new JSONObject(conteudo);
@@ -33,8 +33,7 @@ public class Servidor {
                 break;
             case "update_info":
                 JSONObject update = new JSONObject(conteudo);
-                retur = db.update(update.getString("email"),
-                        update.getString("apelido"),
+                retur = db.update(update.getString("login"),
                         update.getString("idade"));
                 break;
             case "add_contact":
@@ -43,10 +42,14 @@ public class Servidor {
                                       addContato.getString("login_contato"));
 
                 break;
-            case "Atualizar":
+            case "contact":
+                JSONObject buscaConatotos = new JSONObject(conteudo);
+                retur = db.buscaConatotos(buscaConatotos.getString("login"));
 
                 break;
-            case "RemoverUser":
+            case "delite_contact":
+                JSONObject delite = new JSONObject(conteudo);
+                retur = db.delete(delite.getString("login"));
 
                 break;
             case "EditarUser":
