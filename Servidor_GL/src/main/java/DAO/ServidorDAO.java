@@ -55,9 +55,9 @@ public class ServidorDAO {
 
             stmt = c.createStatement();
             String sql = "CREATE TABLE CONTATO" +
-                    "(ID INTEGER PRIMARY KEY,"+
-                    "ID_CLIENTE INTENGER,"+
-                    "FOREIGN KEY(ID_CLIENTE) REFERENCES CLIENTE(ID))";
+                    "(ID INTEGER PRIMARY KEY AUTOINCREMENT ,"+
+                    " ID_CLIENTE        TEXT NOT NULL, " +
+                    " ID_CONTATO         TEXT NOT NULL)";
             stmt.executeUpdate(sql);
             stmt.close();
             c.close();
@@ -188,9 +188,10 @@ public class ServidorDAO {
         }
         System.out.println("Operation done successfully");
     }
-    public String authentication(String emailc, int senhac) throws ClassNotFoundException, SQLException {
+    public String authentication(String login, int senhac) throws ClassNotFoundException, SQLException {
            String retu;
            int idCliente = 0;
+           int idContato = 0;
            List<String> contatos = new ArrayList<>();
             try{
             Class.forName(org);
@@ -199,7 +200,7 @@ public class ServidorDAO {
             System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery( "SELECT * FROM CLIENTE WHERE EMAIL = \""+emailc+"\" " +
+            ResultSet rs = stmt.executeQuery( "SELECT * FROM CLIENTE WHERE LOGIN = \""+login+"\" " +
                     "AND SENHA = \""+senhac+"\";" );
 
             while (rs.next()){
@@ -211,11 +212,11 @@ public class ServidorDAO {
                 c.commit();
 
                 stmt = c.createStatement();
-                ResultSet contato = stmt.executeQuery( "SELECT * FROM CONTATO where ID ="+idCliente+";");
-                while (rs.next()){
-                    contatos.add(contato.getString("login"));
-                }
+                ResultSet contato = stmt.executeQuery( "SELECT * FROM CONTATO WHERE ID = \""+idCliente+"\";" );
 
+                while (contato.next()){
+                    idContato = contato.getInt("ID_CLIENTE");
+                }
 
             } catch ( Exception e ) {
              return e.getClass().getName() + ": " + e.getMessage() ;
@@ -250,12 +251,12 @@ public class ServidorDAO {
             contato.close();
 
             stmt = c.createStatement();
-            String sql = "INSERT INTO CONTATO ( ID ,ID_CLIENTE) " +
+            String sql = "INSERT INTO CONTATO (ID_CLIENTE, ID_CONTATO ) " +
                     "VALUES ('"+id_cliente+"','"+id_contato+"');";
             stmt.executeUpdate(sql);
 
             stmt = c.createStatement();
-            String sqll = "INSERT INTO CONTATO ( ID ,ID_CLIENTE) " +
+            String sqll = "INSERT INTO CONTATO ( ID_CLIENTE ,ID_CONTATO ) " +
                     "VALUES ('"+id_contato+"','"+id_cliente+"');";
             stmt.executeUpdate(sqll);
 

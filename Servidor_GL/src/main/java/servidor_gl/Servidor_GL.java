@@ -23,17 +23,17 @@ import java.sql.SQLException;
 public class Servidor_GL {
 
     public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException {
-        boolean online = true;
-        String login = "julia";
-        String senha = "12345";
-        String idade = "24/01/19";
-        String ip = "123.56.760";
-        String porta = "56000";
-        String email = "asjdodfo";
-        String login_cliente = "gutyGuty";
-        String login_contato = "lulu";
-        ServidorDAO db = new ServidorDAO();
-        Servidor servidor = new Servidor();
+//        boolean online = true;
+//        String login = "lulululu";
+//        String senha = "12345";
+//        String idade = "24/01/19";
+//        String ip = "123.56.760";
+//        String porta = "56000";
+//        String email = "asjdodfo";
+//        String login_cliente = "gutyGuty";
+//        String login_contato = "lulululu";
+//        ServidorDAO db = new ServidorDAO();
+//        Servidor servidor = new Servidor();
 //        String retur = servidor.run( "create_account{"
 //                + "\"login\":\"" + login + "\","
 //                + "\"email\":\"" + email + "\","
@@ -42,43 +42,43 @@ public class Servidor_GL {
 //                + "\"ip\":\"" + ip + "\","
 //                + "\"porta\":\"" + porta + "\","
 //                + "\"idade\":\"" + idade + "\"}");
-        String retur = servidor.run( "add_contact{"+ "\"login_cliente\":\"" + login_cliente + "\"," + "\"login_contato\":\"" + login_contato + "\"}");
-        System.out.println(retur);
-//        int porta = 56000;
-//        ServerSocket server = new ServerSocket(porta);
-//        server.setReuseAddress(true);
-//        Socket conn = null;
-//        PrintWriter out = null;
-//        BufferedReader in = null;
-//        Servidor servidor = new Servidor();
+//        String retur = servidor.run( "add_contact{"+ "\"login_cliente\":\"" + login_cliente + "\"," + "\"login_contato\":\"" + login_contato + "\"}");
+//        System.out.println(retur);
+        int porta = 56000;
+        ServerSocket server = new ServerSocket(porta);
+        server.setReuseAddress(true);
+        Socket conn = null;
+        PrintWriter out = null;
+        BufferedReader in = null;
+        Servidor servidor = new Servidor();
 //        db.criarTabela();
 //        db.criandoRelacionamento();
 
 
-//        while (true) {
-//            try {
-//                System.out.println("Aguardando conexao de cliente...");
-//                conn = server.accept();
-//                System.out.println("Conexao estabelecida. " + conn.getInetAddress().getHostAddress() + " Enviando dados...");
-//                in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//                String linha = in.readLine();
-//                while (linha == null) {
-//                    linha = in.readLine();
-//                    System.out.println(linha);
-//                }
-//                String serverReturn = servidor.run(linha);
-//                out = new PrintWriter(conn.getOutputStream(), true);
-//                out.println(serverReturn);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } finally {
-//                conn.close();
-//                if (out != null) {
-//                    out.close();
-//                }
-//                System.out.println("Conexao fechada.");
-//            }conn.close();
-//        }
+        while (true) {
+            try {
+                System.out.println("Aguardando conexao de cliente...");
+                conn = server.accept();
+                System.out.println("Conexao estabelecida. " + conn.getInetAddress().getHostAddress() + " Enviando dados...");
+                in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String linha = in.readLine();
+                while (linha == null) {
+                    linha = in.readLine();
+                    System.out.println(linha);
+                }
+                String serverReturn = servidor.run(linha);
+                out = new PrintWriter(conn.getOutputStream(), true);
+                out.println(serverReturn);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                conn.close();
+                if (out != null) {
+                    out.close();
+                }
+                System.out.println("Conexao fechada.");
+            }conn.close();
+        }
 
     }
     
