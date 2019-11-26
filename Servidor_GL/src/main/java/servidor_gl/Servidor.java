@@ -23,19 +23,24 @@ public class Servidor {
                 break;
             case "create_account":
                 JSONObject cadastrar = new JSONObject(conteudo);
-                retur = db.salvar(cadastrar.getString("apelido"),
+                retur = db.salvar(cadastrar.getString("login"),
                         cadastrar.getString("email"),
-                        cadastrar.getInt("senha"),
+                        cadastrar.getString("senha"),
                         cadastrar.getBoolean("online"),
-                        cadastrar.getString("nasci"));
+                        cadastrar.getString("ip"),
+                        cadastrar.getString("porta"),
+                        cadastrar.getString("idade"));
                 break;
             case "update_info":
                 JSONObject update = new JSONObject(conteudo);
-                retur = db.update(update.getString("apelido"),
-                        update.getString("email"),
-                        update.getString("nasci"));
+                retur = db.update(update.getString("email"),
+                        update.getString("apelido"),
+                        update.getString("idade"));
                 break;
-            case "AddUser":
+            case "add_contact":
+                JSONObject addContato = new JSONObject(conteudo);
+                retur = db.addContato(addContato.getString("login_cliente"),
+                                      addContato.getString("login_contato"));
 
                 break;
             case "Atualizar":

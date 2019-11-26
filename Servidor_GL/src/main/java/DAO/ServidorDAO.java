@@ -6,13 +6,15 @@
 package DAO;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Luciano Velho
  */
 public class ServidorDAO {
-    
+
     Connection c = null;
     Statement stmt = null;
     String org = "org.sqlite.JDBC";
@@ -28,11 +30,13 @@ public class ServidorDAO {
             stmt = c.createStatement();
             String sql = "CREATE TABLE CLIENTE " +
                     "(ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                    " APELIDO           TEXT    NOT NULL, " +
+                    " LOGIN           TEXT    NOT NULL, " +
                     " EMAIL            TEXT     NOT NULL, " +
                     " ONLINE            BOOLEAN     NOT NULL, " +
-                    " SENHA        INT NOT NULL, " +
-                    " NASCI         TEXT NOT NULL)";
+                    " SENHA        TEXT NOT NULL, " +
+                    " IP        TEXT NOT NULL, " +
+                    " PORTA        TEXT NOT NULL, " +
+                    " IDADE         TEXT NOT NULL)";
             stmt.executeUpdate(sql);
             stmt.close();
             c.close();
@@ -51,11 +55,7 @@ public class ServidorDAO {
 
             stmt = c.createStatement();
             String sql = "CREATE TABLE CONTATO" +
-                    "(ID INTEGER PRIMARY KEY AUTOINCREMENT,"+
-                    "TOKEN TEXT ," +
-                    "LOGIN TEXT ," +
-                    "PORTA TEXT ," +
-                    "ONLINE  BOOLEAN NOT NULL, " +
+                    "(ID INTEGER PRIMARY KEY,"+
                     "ID_CLIENTE INTENGER,"+
                     "FOREIGN KEY(ID_CLIENTE) REFERENCES CLIENTE(ID))";
             stmt.executeUpdate(sql);
@@ -69,7 +69,7 @@ public class ServidorDAO {
     }
 
 
-    public String salvar ( String apelido, String email, int senha , boolean online , String nasci) {
+    public String salvar ( String login, String email, String senha , boolean online , String ip, String porta, String idade) {
         String retur;
         try {
             Class.forName(org);
@@ -78,8 +78,8 @@ public class ServidorDAO {
             System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
-            String sql = "INSERT INTO CLIENTE (APELIDO,EMAIL,ONLINE,SENHA,NASCI) " +
-                    "VALUES ('"+apelido+"','"+email+"','"+online+"','"+senha+"', '"+nasci+"' );";
+            String sql = "INSERT INTO CLIENTE ( LOGIN ,EMAIL,SENHA,ONLINE,IP,PORTA,IDADE) " +
+                    "VALUES ('"+login+"','"+email+"','"+senha+"','"+online+"', '"+ip+"', '"+porta+"', '"+idade+"' );";
             stmt.executeUpdate(sql);
 
             stmt.close();
@@ -124,7 +124,7 @@ public class ServidorDAO {
         }
         System.out.println("Operation done successfully");
     }
-    public String update( String apelido , String email, String nasci) throws SQLException, ClassNotFoundException {
+    public String update( String login , String email, String idade) throws SQLException, ClassNotFoundException {
             String retur;
             try {
             Class.forName(org);
@@ -133,8 +133,13 @@ public class ServidorDAO {
             System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
-            String sql = "UPDATE CLIENTE set EMAIL = '"+email+"', NASCI = '"+nasci+"'  where APELIDO= '"+apelido+"';";
-            stmt.executeUpdate(sql);
+            ResultSet rs =  stmt.executeQuery("UPDATE CLIENTE set LOGIN = '"+login+"', IDADE = '"+idade+"'  where EMAIL= '"+email+"';");
+                while ( rs.next() ) {
+                    String apelido0 = rs.getString("apelido");
+                    String  emaill = rs.getString("email");
+                    int senha  = rs.getInt("senha");
+                    String  nascii = rs.getString("nasci");
+                }
             stmt.close();
             c.close();
 
@@ -154,7 +159,7 @@ public class ServidorDAO {
             System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
-            String sql = "DELETE from CLIENTE where ID="+idCliente+";";
+            String sql = "DELETE from CONTATO where ID="+idCliente+";";
             stmt.executeUpdate(sql);
             c.commit();
 
@@ -184,22 +189,85 @@ public class ServidorDAO {
         System.out.println("Operation done successfully");
     }
     public String authentication(String emailc, int senhac) throws ClassNotFoundException, SQLException {
-        String retu;
-
+           String retu;
+           int idCliente = 0;
+           List<String> contatos = new ArrayList<>();
+            try{
             Class.forName(org);
             c = DriverManager.getConnection(db);
             c.setAutoCommit(false);
             System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery( "SELECT email FROM CLIENTE WHERE EMAIL = \""+emailc+"\" " +
+            ResultSet rs = stmt.executeQuery( "SELECT * FROM CLIENTE WHERE EMAIL = \""+emailc+"\" " +
                     "AND SENHA = \""+senhac+"\";" );
-            
+
             while (rs.next()){
-                return retu = "SUCCESS";
+                idCliente = rs.getInt("id");
             }
-            return  retu = "fail";
+                stmt = c.createStatement();
+                String sql = "UPDATE ClIENTE set ONLINE = 'true' where ID="+idCliente+";";
+                stmt.executeUpdate(sql);
+                c.commit();
 
+                stmt = c.createStatement();
+                ResultSet contato = stmt.executeQuery( "SELECT * FROM CONTATO where ID ="+idCliente+";");
+                while (rs.next()){
+                    contatos.add(contato.getString("login"));
+                }
+
+
+            } catch ( Exception e ) {
+             return e.getClass().getName() + ": " + e.getMessage() ;
+             }
+
+            return null;
     }
+    public String addContato(String login_cliente, String login_contato){
+        int id_cliente = 0;
+        int id_contato = 0;
+        try {
+            Class.forName(org);
+            c = DriverManager.getConnection(db);
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
+            stmt = c.createStatement();
+            ResultSet cliente = stmt.executeQuery( "SELECT * FROM CLIENTE WHERE LOGIN = '"+login_cliente+"';" );
+
+            while ( cliente.next() ) {
+                id_cliente = cliente.getInt("id");
+            }
+            cliente.close();
+
+
+            stmt = c.createStatement();
+            ResultSet contato = stmt.executeQuery( "SELECT * FROM CLIENTE WHERE LOGIN = '"+login_contato+"';" );
+
+            while ( contato.next() ) {
+                id_contato = contato.getInt("id");
+            }
+            contato.close();
+
+            stmt = c.createStatement();
+            String sql = "INSERT INTO CONTATO ( ID ,ID_CLIENTE) " +
+                    "VALUES ('"+id_cliente+"','"+id_contato+"');";
+            stmt.executeUpdate(sql);
+
+            stmt = c.createStatement();
+            String sqll = "INSERT INTO CONTATO ( ID ,ID_CLIENTE) " +
+                    "VALUES ('"+id_contato+"','"+id_cliente+"');";
+            stmt.executeUpdate(sqll);
+
+            stmt.close();
+            c.commit();
+            c.close();
+
+        } catch ( Exception e ) {
+            return  e.getClass().getName() + ": " + e.getMessage();
+
+        }
+
+        return "SUCESSO";
+    }
 }
